@@ -1,0 +1,101 @@
+C51 COMPILER V9.57.0.0   L2C                                                               06/16/2024 12:27:13 PAGE 1   
+
+
+C51 COMPILER V9.57.0.0, COMPILATION OF MODULE L2C
+OBJECT MODULE PLACED IN .\Objects\l2c.obj
+COMPILER INVOKED BY: D:\Keil_v5\C51\BIN\C51.EXE l2c.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\l2c.l
+                    -st) TABS(2) OBJECT(.\Objects\l2c.obj)
+
+line level    source
+
+   1          #include <reg51.h>
+   2          #include <stdio.h>
+   3          #include "i2c.h"
+   4          
+   5          
+   6          uchar tab1[100]="h";
+   7          
+   8          void delay(void)                                        //?us???
+   9          {
+  10   1              uchar i = 2;
+  11   1              while(i--);
+  12   1      }
+  13          void i2c_start(void)                        //????
+  14          {                                                                                                        /
+             -/SCL???,SDA???
+  15   1              SDA = 1;
+  16   1              SCL = 1;
+  17   1              delay();
+  18   1              SDA = 0;
+  19   1              delay();       
+  20   1      }
+  21          void i2c_stop(void)                                //????
+  22          {                                                                                                        /
+             -/SCL???,SDA???
+  23   1              SDA = 0;
+  24   1              SCL = 1;
+  25   1              delay();
+  26   1              SDA = 1;
+  27   1              delay();
+  28   1      }
+  29          void ack(void)                                                //ACK??
+  30          {                                                                                                        /
+             -/?????,????
+  31   1              SCL = 0;
+  32   1              delay();
+  33   1              SDA = 1;
+  34   1              SCL = 1;
+  35   1              while(SDA);
+  36   1              delay();
+  37   1              SCL = 0;
+  38   1              delay();
+  39   1      }
+  40          void i2c_write(uchar dat)        //?8bit??
+  41          {
+  42   1              uchar i;
+  43   1              for(i = 0; i < 8; i++)
+  44   1              {
+  45   2                      SCL = 0;
+  46   2                      SDA = dat & 0x80;
+  47   2                      delay();
+  48   2                      SCL = 1;
+  49   2                      dat <<= 1;
+  50   2                      delay();         
+  51   2              }
+C51 COMPILER V9.57.0.0   L2C                                                               06/16/2024 12:27:13 PAGE 2   
+
+  52   1              ack();
+  53   1      }
+  54          uchar i2c_read(void)                        //?8bit??
+  55          {
+  56   1              uchar temp,i;
+  57   1              for (i = 0;i < 8;i++)
+  58   1              {
+  59   2                      SCL = 1;       
+  60   2                      delay();
+  61   2                      temp <<= 1;
+  62   2                      temp |= SDA;
+  63   2                      SCL = 0;
+  64   2                      delay();
+  65   2              }
+  66   1              SDA = 1;
+  67   1              SCL = 1;
+  68   1              delay();
+  69   1              SCL = 0;
+  70   1              delay();
+  71   1              return temp;
+  72   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    123    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =    100    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

@@ -1,0 +1,6 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\l2c.obj",
+".\Objects\lcd.obj" 
+TO ".\Objects\code" 
+PRINT(".\Listings\code.m51") RAMSIZE(256) 
